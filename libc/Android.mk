@@ -621,6 +621,11 @@ ifeq ($(TARGET_ARCH),$(filter $(TARGET_ARCH),mips mips64))
   use_clang := false
 endif
 
+# Clang/llvm breaks sensors for msm8960 (e.g. mako).
+ifeq ($(TARGET_BOARD_PLATFORM),$(filter $(TARGET_BOARD_PLATFORM),msm8960))
+  use_clang := false
+endif
+
 ifeq ($(use_clang),)
   use_clang := true
 endif
@@ -1071,7 +1076,7 @@ LOCAL_CONLYFLAGS := $(libc_common_conlyflags)
 LOCAL_CPPFLAGS := $(libc_common_cppflags) -Wold-style-cast
 LOCAL_C_INCLUDES := $(libc_common_c_includes)
 LOCAL_MODULE := libc_pthread
-LOCAL_CLANG := false
+LOCAL_CLANG := $(use_clang)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(libc_common_additional_dependencies)
 LOCAL_CXX_STL := none
 LOCAL_SYSTEM_SHARED_LIBRARIES :=
